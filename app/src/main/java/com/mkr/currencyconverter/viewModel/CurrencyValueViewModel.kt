@@ -6,7 +6,8 @@ class CurrencyValueViewModel(
         val currency: String,
         val rate: Double,
         val sourceCurrency: String,
-        val amount: Double
+        val amount: Double,
+        val selectedCurrencyValue: Double
 ) {
     fun displayCurrency(): String {
         return currency.removePrefix(sourceCurrency)
@@ -14,6 +15,6 @@ class CurrencyValueViewModel(
 
     fun displayAmount(): String {
         val dec = DecimalFormat("#,###.##")
-        return dec.format(amount * rate).toString()
+        return dec.format(amount * rate / selectedCurrencyValue).toString()
     }
 }

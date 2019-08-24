@@ -28,6 +28,7 @@ import javax.inject.Inject
 class CurrencyRateViewModel(private val context: Context, val spinner: Spinner): BaseObservable(), TextWatcher, AdapterView.OnItemSelectedListener {
 
     private var sourceCurrency: String = ""
+    var currencyRate:HashMap<String, Double> = HashMap()
     var currencyList: Array<String> =  emptyArray()
 
     @Inject
@@ -90,13 +91,16 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
 
     private fun updateList(hashMap: HashMap<String, Double>) {
         val currencyRateList: ArrayList<CurrencyRate> = ArrayList()
-        for (key in hashMap.keys)
+        for (key in hashMap.keys) {
             currencyRateList.add(CurrencyRate(key.removePrefix("USD"), hashMap[key]!!))
+            currencyRate[key.removePrefix("USD")] = hashMap[key]!!
+        }
         currencyAdapter.updateList(currencyRateList)
         currencyAdapter.notifyDataSetChanged()
     }
 
     fun setUpSpinner() {
+        currencyList.sort()
         val spinnerAdapter = ArrayAdapter(context,android.R.layout.simple_spinner_item, currencyList)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
@@ -105,7 +109,9 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
     private fun updateSourceCurrency(index: Int) {
         sourceCurrency = currencyList[index]
         currencyAdapter.source = sourceCurrency
+        currencyAdapter.selectedCurrencyValue = currencyRate[sourceCurrency] ?: 1.0
         Toast.makeText(context, sourceCurrency, Toast.LENGTH_SHORT).show()
+        currencyAdapter.notifyDataSetChanged()
     }
 
     private fun updateAmount(amount: Double) {
