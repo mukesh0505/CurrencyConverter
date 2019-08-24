@@ -1,5 +1,7 @@
 package com.mkr.currencyconverter.viewModel
 
+import java.text.DecimalFormat
+
 class CurrencyValueViewModel(
         val currency: String,
         val rate: Double,
@@ -11,6 +13,7 @@ class CurrencyValueViewModel(
     }
 
     fun displayAmount(): String {
-        return (amount * rate).toString()
+        val dec = DecimalFormat("#,###.##")
+        return dec.format(amount * rate).toString()
     }
 }
