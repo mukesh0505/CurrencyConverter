@@ -3,7 +3,11 @@ package com.mkr.currencyconverter.viewModel
 import android.content.Context
 import android.databinding.BaseObservable
 import android.databinding.Bindable
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
@@ -21,7 +25,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
-class CurrencyRateViewModel(private val context: Context, val spinner: Spinner): BaseObservable() {
+class CurrencyRateViewModel(private val context: Context, val spinner: Spinner): BaseObservable(), TextWatcher, AdapterView.OnItemSelectedListener {
 
     private var sourceCurrency: String = ""
     var currencyList: Array<String> =  emptyArray()
@@ -109,6 +113,26 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
         currencyAdapter.amount = amount
         currencyAdapter.notifyDataSetChanged()
 
+    }
+
+
+    override fun afterTextChanged(p0: Editable?) {
+        val text = p0?.toString()
+        text?.let {
+            if (it.isNotEmpty()) {
+                updateAmount(it.toDouble())
+            }
+        }
+    }
+
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        updateSourceCurrency(p2)
     }
 
     companion object {
