@@ -1,0 +1,117 @@
+package com.mkr.currencyconverter.viewModel
+
+import android.content.Context
+import android.databinding.BaseObservable
+import android.databinding.Bindable
+import android.util.Log
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.Toast
+import com.mkr.currencyconverter.BR
+import com.mkr.currencyconverter.CurrencyApi
+import com.mkr.currencyconverter.adapter.CurrencyRateAdapter
+import com.mkr.currencyconverter.di.component.DaggerAppComponent
+import com.mkr.currencyconverter.model.CurrencyListResponse
+import com.mkr.currencyconverter.model.CurrencyRate
+import com.mkr.currencyconverter.model.CurrencyRateResponse
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
+
+
+class CurrencyRateViewModel(private val context: Context, val spinner: Spinner): BaseObservable() {
+
+    private var sourceCurrency: String = ""
+    var currencyList: Array<String> =  emptyArray()
+
+    @Inject
+    lateinit var currencyApi: CurrencyApi
+
+    var currencyAdapter = CurrencyRateAdapter()
+
+    init {
+        DaggerAppComponent.builder().build().inject(this)
+        fetchSupportedCurrency()
+        fetchCurrencyRate()
+    }
+
+    var amount: Double = 1.0
+    @Bindable get() = field
+        set(value) {
+            field = value
+            currencyAdapter.amount = field
+            notifyPropertyChanged(BR.amount)
+        }
+
+    private fun fetchSupportedCurrency() {
+        currencyApi.getSupportedCurrencies()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<CurrencyListResponse> {
+                    override fun onComplete() {}
+
+                    override fun onSubscribe(d: Disposable) {}
+
+                    override fun onNext(t: CurrencyListResponse) {
+                        currencyList = t.countryList.keys.toTypedArray()
+                        setUpSpinner()
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Log.e(TAG, e.toString())
+                    }
+                })
+    }
+
+    private fun fetchCurrencyRate() {
+        currencyApi.getCurrencyRates()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<CurrencyRateResponse> {
+                    override fun onComplete() {}
+
+                    override fun onSubscribe(d: Disposable) {}
+
+                    override fun onNext(t: CurrencyRateResponse) {
+                        updateList(t.rates)
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Log.e(TAG, e.toString())
+                    }
+                })
+    }
+
+    private fun updateList(hashMap: HashMap<String, Double>) {
+        val currencyRateList: ArrayList<CurrencyRate> = ArrayList()
+        for (key in hashMap.keys)
+            currencyRateList.add(CurrencyRate(key, hashMap[key]!!))
+        currencyAdapter.updateList(currencyRateList)
+        currencyAdapter.notifyDataSetChanged()
+    }
+
+    fun setUpSpinner() {
+        val spinnerAdapter = ArrayAdapter(context,android.R.layout.simple_spinner_item, currencyList)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = spinnerAdapter
+    }
+
+    fun updateSourceCurrency(index: Int) {
+        sourceCurrency = currencyList[index]
+        currencyAdapter.source = sourceCurrency
+        Toast.makeText(context, sourceCurrency, Toast.LENGTH_SHORT).show()
+    }
+
+    fun updateAmount(amount: Double) {
+        this.amount = amount
+        currencyAdapter.amount = amount
+        currencyAdapter.notifyDataSetChanged()
+
+    }
+
+    companion object {
+        private val TAG = CurrencyRateViewModel::class.java.simpleName
+    }
+}
