@@ -91,7 +91,7 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
     private fun updateList(hashMap: HashMap<String, Double>) {
         val currencyRateList: ArrayList<CurrencyRate> = ArrayList()
         for (key in hashMap.keys)
-            currencyRateList.add(CurrencyRate(key, hashMap[key]!!))
+            currencyRateList.add(CurrencyRate(key.removePrefix("USD"), hashMap[key]!!))
         currencyAdapter.updateList(currencyRateList)
         currencyAdapter.notifyDataSetChanged()
     }
@@ -102,13 +102,13 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
         spinner.adapter = spinnerAdapter
     }
 
-    fun updateSourceCurrency(index: Int) {
+    private fun updateSourceCurrency(index: Int) {
         sourceCurrency = currencyList[index]
         currencyAdapter.source = sourceCurrency
         Toast.makeText(context, sourceCurrency, Toast.LENGTH_SHORT).show()
     }
 
-    fun updateAmount(amount: Double) {
+    private fun updateAmount(amount: Double) {
         this.amount = amount
         currencyAdapter.amount = amount
         currencyAdapter.notifyDataSetChanged()
