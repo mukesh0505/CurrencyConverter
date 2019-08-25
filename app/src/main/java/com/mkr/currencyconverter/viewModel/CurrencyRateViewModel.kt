@@ -92,7 +92,6 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
                         if (t.success == "false") showSuccessError()
                         else {
                             updateList(t.rates)
-                            Toast.makeText(context, t.toString(), Toast.LENGTH_SHORT).show()
                         }
                     }
 
@@ -114,6 +113,7 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
         }
         currencyAdapter.updateList(currencyRateList)
         currencyAdapter.notifyDataSetChanged()
+        updateSourceCurrencyValue()
     }
 
     fun setUpSpinner() {
@@ -126,9 +126,13 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
     private fun updateSourceCurrency(index: Int) {
         sourceCurrency = currencyList[index]
         currencyAdapter.source = sourceCurrency
-        currencyAdapter.selectedCurrencyValue = currencyRate[sourceCurrency] ?: 1.0
         Toast.makeText(context, sourceCurrency, Toast.LENGTH_SHORT).show()
         currencyAdapter.notifyDataSetChanged()
+        updateSourceCurrencyValue()
+    }
+
+    private fun updateSourceCurrencyValue() {
+        currencyAdapter.selectedCurrencyValue = currencyRate[sourceCurrency] ?: 1.0
     }
 
     private fun updateAmount(amount: Double) {
