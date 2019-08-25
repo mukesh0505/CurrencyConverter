@@ -21,6 +21,5 @@ class MainActivity : AppCompatActivity() {
         currencyRateViewModel = CurrencyRateViewModel(this, currencySpinner)
         activityMainBinding.currencyRateViewModel = currencyRateViewModel
         activityMainBinding.currencyRate.layoutManager = GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false)
-        currencySpinner.onItemSelectedListener = currencyRateViewModel
     }
 }
