@@ -11,8 +11,8 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import com.mkr.currencyconverter.BR
-import com.mkr.currencyconverter.CurrencyApi
-import com.mkr.currencyconverter.adapter.CurrencyRateAdapter
+import com.mkr.currencyconverter.helper.CurrencyApi
+import com.mkr.currencyconverter.ui.CurrencyRateAdapter
 import com.mkr.currencyconverter.di.component.DaggerAppComponent
 import com.mkr.currencyconverter.model.CurrencyListResponse
 import com.mkr.currencyconverter.model.CurrencyRate

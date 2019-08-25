@@ -1,9 +1,10 @@
-package com.mkr.currencyconverter
+package com.mkr.currencyconverter.ui
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
+import com.mkr.currencyconverter.R
 import com.mkr.currencyconverter.databinding.ActivityMainBinding
 import com.mkr.currencyconverter.viewModel.CurrencyRateViewModel
 import kotlinx.android.synthetic.main.activity_main.*

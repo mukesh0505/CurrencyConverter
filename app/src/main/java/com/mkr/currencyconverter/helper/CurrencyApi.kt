@@ -1,4 +1,4 @@
-package com.mkr.currencyconverter
+package com.mkr.currencyconverter.helper
 
 import com.mkr.currencyconverter.model.CurrencyListResponse
 import com.mkr.currencyconverter.model.CurrencyRateResponse

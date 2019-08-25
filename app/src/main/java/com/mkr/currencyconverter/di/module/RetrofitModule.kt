@@ -1,6 +1,6 @@
 package com.mkr.currencyconverter.di.module
 
-import com.mkr.currencyconverter.CurrencyApi
+import com.mkr.currencyconverter.helper.CurrencyApi
 import com.mkr.currencyconverter.di.scope.ApplicationScope
 import com.mkr.currencyconverter.utils.Constants
 import dagger.Module

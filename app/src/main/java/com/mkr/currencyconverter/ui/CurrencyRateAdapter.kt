@@ -1,4 +1,4 @@
-package com.mkr.currencyconverter.adapter
+package com.mkr.currencyconverter.ui
 
 import android.databinding.DataBindingUtil.inflate
 import android.support.v7.widget.RecyclerView
