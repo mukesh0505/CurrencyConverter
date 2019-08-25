@@ -25,7 +25,7 @@ import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 
-class CurrencyRateViewModel(private val context: Context, val spinner: Spinner): BaseObservable(), TextWatcher, AdapterView.OnItemSelectedListener {
+class CurrencyRateViewModel(private val context: Context, val spinner: Spinner): BaseObservable(), AdapterView.OnItemSelectedListener {
 
     private var sourceCurrency: String = ""
     var currencyRate:HashMap<String, Double> = HashMap()
@@ -122,18 +122,14 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
     }
 
 
-    override fun afterTextChanged(p0: Editable?) {
+    fun afterTextChanged(p0: Editable?) {
         val text = p0?.toString()
         text?.let {
             if (it.isNotEmpty()) {
                 updateAmount(it.toDouble())
-            }
+            } else updateAmount(0.0)
         }
     }
-
-    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
     override fun onNothingSelected(p0: AdapterView<*>?) {}
 
