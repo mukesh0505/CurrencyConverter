@@ -4,7 +4,6 @@ import android.content.Context
 import android.databinding.BaseObservable
 import android.databinding.Bindable
 import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -22,6 +21,8 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -60,8 +61,12 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
                     override fun onSubscribe(d: Disposable) {}
 
                     override fun onNext(t: CurrencyListResponse) {
-                        currencyList = t.countryList.keys.toTypedArray()
-                        setUpSpinner()
+                        if (t.success == "false") showSuccessError()
+                        else {
+                            currencyList = t.countryList.keys.toTypedArray()
+                            setUpSpinner()
+                        }
+
                     }
 
                     override fun onError(e: Throwable) {
@@ -71,7 +76,11 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
     }
 
     private fun fetchCurrencyRate() {
-        currencyApi.getCurrencyRates()
+
+        io.reactivex.Observable.interval(0, 30, TimeUnit.MINUTES)
+                .flatMap {
+                    return@flatMap currencyApi.getCurrencyRates()
+                }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<CurrencyRateResponse> {
@@ -80,13 +89,21 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
                     override fun onSubscribe(d: Disposable) {}
 
                     override fun onNext(t: CurrencyRateResponse) {
-                        updateList(t.rates)
+                        if (t.success == "false") showSuccessError()
+                        else {
+                            updateList(t.rates)
+                            Toast.makeText(context, t.toString(), Toast.LENGTH_SHORT).show()
+                        }
                     }
 
                     override fun onError(e: Throwable) {
                         Log.e(TAG, e.toString())
                     }
                 })
+    }
+
+    private fun showSuccessError() {
+        Toast.makeText(context, "Success = false", Toast.LENGTH_SHORT).show()
     }
 
     private fun updateList(hashMap: HashMap<String, Double>) {

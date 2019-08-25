@@ -10,7 +10,7 @@ class CurrencyValueViewModel(
         val selectedCurrencyValue: Double
 ) {
     fun displayCurrency(): String {
-        return currency.removePrefix(sourceCurrency)
+        return currency
     }
 
     fun displayAmount(): String {
