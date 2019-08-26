@@ -51,6 +51,13 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
             notifyPropertyChanged(BR.amount)
         }
 
+    var shouldShowError = false
+    @Bindable get() = field
+    set(value) {
+        field = value
+        notifyPropertyChanged(BR.shouldShowError)
+    }
+
     private fun fetchSupportedCurrency() {
         currencyApi.getSupportedCurrencies()
                 .subscribeOn(Schedulers.io())
@@ -71,6 +78,7 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
 
                     override fun onError(e: Throwable) {
                         Log.e(TAG, e.toString())
+                        shouldShowError = true
                     }
                 })
     }
@@ -97,11 +105,13 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
 
                     override fun onError(e: Throwable) {
                         Log.e(TAG, e.toString())
+                        shouldShowError = true
                     }
                 })
     }
 
     private fun showSuccessError() {
+        shouldShowError = true
         Toast.makeText(context, "Success = false", Toast.LENGTH_SHORT).show()
     }
 

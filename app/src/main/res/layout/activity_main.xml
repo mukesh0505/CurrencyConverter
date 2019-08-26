@@ -4,55 +4,70 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
+
         <variable
             name="currencyRateViewModel"
-            type="com.mkr.currencyconverter.viewModel.CurrencyRateViewModel"/>
+            type="com.mkr.currencyconverter.viewModel.CurrencyRateViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.MainActivity">
+        android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/amount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:ems="10"
-            android:hint="@string/amount"
-            android:text="@string/amount_default_value"
-            android:afterTextChanged="@{currencyRateViewModel.afterTextChanged}"
-            android:inputType="numberDecimal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="16dp"
-            tools:ignore="MissingConstraints" />
-
-        <Spinner
-            android:id="@+id/currencySpinner"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:spinnerMode="dialog"
-            android:onItemSelected="@{currencyRateViewModel.onItemSelected}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/amount" />
+            android:layout_centerInParent="true"
+            android:visibility="@{currencyRateViewModel.shouldShowError ? View.VISIBLE : View.GONE}"
+            android:text="@string/unable_to_fetch_currency_details"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/currencyRate"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="0dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="16dp"
-            app:adapter="@{currencyRateViewModel.currencyAdapter}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/currencySpinner" />
-    </android.support.constraint.ConstraintLayout>
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="@{currencyRateViewModel.shouldShowError ? View.GONE : View.VISIBLE}"
+            tools:context=".ui.MainActivity">
+
+            <EditText
+                android:id="@+id/amount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:afterTextChanged="@{currencyRateViewModel.afterTextChanged}"
+                android:ems="10"
+                android:hint="@string/amount"
+                android:inputType="numberDecimal"
+                android:text="@string/amount_default_value"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteY="16dp" />
+
+            <Spinner
+                android:id="@+id/currencySpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:onItemSelected="@{currencyRateViewModel.onItemSelected}"
+                android:spinnerMode="dialog"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/amount" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/currencyRate"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="8dp"
+                app:adapter="@{currencyRateViewModel.currencyAdapter}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/currencySpinner" />
+        </android.support.constraint.ConstraintLayout>
+    </RelativeLayout>
 </layout>
