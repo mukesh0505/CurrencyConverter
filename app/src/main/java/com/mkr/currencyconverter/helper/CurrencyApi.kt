@@ -6,7 +6,7 @@ import com.mkr.currencyconverter.utils.Constants
 import io.reactivex.Observable
 import retrofit2.http.GET
 
-interface CurrencyApi{
+interface CurrencyApi {
 
     @GET("list?access_key=${Constants.ACCESS_KEY}")
     fun getSupportedCurrencies(): Observable<CurrencyListResponse>

@@ -9,7 +9,7 @@ import com.mkr.currencyconverter.databinding.CurrencyItemviewBinding
 import com.mkr.currencyconverter.model.CurrencyRate
 import com.mkr.currencyconverter.viewModel.CurrencyValueViewModel
 
-class CurrencyRateAdapter: RecyclerView.Adapter<CurrencyRateAdapter.CurrencyViewHolder>() {
+class CurrencyRateAdapter : RecyclerView.Adapter<CurrencyRateAdapter.CurrencyViewHolder>() {
 
     private lateinit var list: ArrayList<CurrencyRate>
     var amount: Double = 1.0
@@ -20,7 +20,6 @@ class CurrencyRateAdapter: RecyclerView.Adapter<CurrencyRateAdapter.CurrencyView
         val inflater = LayoutInflater.from(p0.context)
         val binding: CurrencyItemviewBinding = inflate(inflater, R.layout.currency_itemview, p0, false)
         return CurrencyViewHolder(binding)
-
     }
 
     override fun getItemCount(): Int {
@@ -33,8 +32,7 @@ class CurrencyRateAdapter: RecyclerView.Adapter<CurrencyRateAdapter.CurrencyView
         this.list = list
     }
 
-    class CurrencyViewHolder(private val currencyItemviewBinding: CurrencyItemviewBinding): RecyclerView.ViewHolder(currencyItemviewBinding.root) {
-
+    class CurrencyViewHolder(private val currencyItemviewBinding: CurrencyItemviewBinding) : RecyclerView.ViewHolder(currencyItemviewBinding.root) {
         fun bind(currencyValueViewModel: CurrencyValueViewModel) {
             currencyItemviewBinding.currencyRate = currencyValueViewModel
         }

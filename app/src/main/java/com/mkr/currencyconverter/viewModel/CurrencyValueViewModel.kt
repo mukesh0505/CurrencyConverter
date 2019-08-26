@@ -15,6 +15,7 @@ class CurrencyValueViewModel(
 
     fun displayAmount(): String {
         val dec = DecimalFormat("#,###.##")
+        //Since, current API doesn't support source currency change.So, This logic helps in source currency change
         return dec.format(amount * rate / selectedCurrencyValue).toString()
     }
 }

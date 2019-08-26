@@ -26,11 +26,11 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class CurrencyRateViewModel(private val context: Context, val spinner: Spinner): BaseObservable() {
+class CurrencyRateViewModel(private val context: Context, val spinner: Spinner) : BaseObservable() {
 
     private var sourceCurrency: String = ""
-    var currencyRate:HashMap<String, Double> = HashMap()
-    var currencyList: Array<String> =  emptyArray()
+    var currencyRate: HashMap<String, Double> = HashMap()
+    var currencyList: Array<String> = emptyArray()
 
     @Inject
     lateinit var currencyApi: CurrencyApi
@@ -44,7 +44,7 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
     }
 
     var amount: Double = 1.0
-    @Bindable get() = field
+        @Bindable get() = field
         set(value) {
             field = value
             currencyAdapter.amount = field
@@ -52,11 +52,11 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
         }
 
     var shouldShowError = false
-    @Bindable get() = field
-    set(value) {
-        field = value
-        notifyPropertyChanged(BR.shouldShowError)
-    }
+        @Bindable get() = field
+        set(value) {
+            field = value
+            notifyPropertyChanged(BR.shouldShowError)
+        }
 
     private fun fetchSupportedCurrency() {
         currencyApi.getSupportedCurrencies()
@@ -84,7 +84,6 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
     }
 
     private fun fetchCurrencyRate() {
-
         io.reactivex.Observable.interval(0, 30, TimeUnit.MINUTES)
                 .flatMap {
                     return@flatMap currencyApi.getCurrencyRates()
@@ -128,7 +127,7 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
 
     fun setUpSpinner() {
         currencyList.sort()
-        val spinnerAdapter = ArrayAdapter(context,android.R.layout.simple_spinner_item, currencyList)
+        val spinnerAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, currencyList)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
     }
@@ -149,9 +148,7 @@ class CurrencyRateViewModel(private val context: Context, val spinner: Spinner):
         this.amount = amount
         currencyAdapter.amount = amount
         currencyAdapter.notifyDataSetChanged()
-
     }
-
 
     fun afterTextChanged(p0: Editable?) {
         val text = p0?.toString()
